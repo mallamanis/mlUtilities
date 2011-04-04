@@ -1,7 +1,31 @@
 #!/usr/bin/python
 import random
-numOfVars = 2
-numOfSamples = 400
+import sys
+from optparse import OptionParser
+
+
+parser = OptionParser()
+parser.add_option("-v", "--vars", dest="numOfVars",
+                  help="the number of variables to create",type="int")
+parser.add_option("-s", "--samples", dest="numOfSamples",
+                  help="the number of samples to create",  type="int")
+
+
+(options, args) = parser.parse_args()
+
+if (options.numOfVars != None):
+	numOfVars = options.numOfVars;
+else:
+	print "Error: You must define number of variables"
+	sys.exit(2)
+	
+if (options.numOfSamples != None):
+	numOfSamples = options.numOfSamples;
+else:
+	print "Error: You must define number of samples"
+	sys.exit(2)
+
+
 
 
 print "@relation 'partition'"
