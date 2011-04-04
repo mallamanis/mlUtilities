@@ -26,8 +26,6 @@ else:
 	sys.exit(2)
 
 
-
-
 print "@relation 'partition'"
 
 for i in range(0,numOfVars):
