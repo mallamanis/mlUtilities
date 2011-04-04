@@ -1,8 +1,35 @@
 #!/usr/bin/python
-numOfAttributes = 7
-numOfLabels = 7
-startFrom = 11
+import sys
+from optparse import OptionParser
 
+parser = OptionParser()
+parser.add_option("-a", "--attributes", dest="numOfAttributes",
+                  help="the number of bits to be used (as attributes)", type="int")
+parser.add_option("-l", "--labels", dest="numOfLabels",
+                  help="the number of labels of the generated file", type="int")
+parser.add_option("-s", "--start", type="int", dest="startFrom",
+                  help="the number from which we are going to start")
+(options, args) = parser.parse_args()
+
+if (options.numOfAttributes != None):
+	numOfAttributes = options.numOfAttributes;
+else:
+	print "Error: You must define number of attributes"
+	sys.exit(2)
+	
+if (options.numOfLabels != None):
+	numOfLabels = options.numOfLabels;
+else:
+	print "Error: You must define number of labels"
+	sys.exit(2)
+
+if (options.startFrom != None):
+	startFrom = options.startFrom;
+else:
+	print "Error: You must define number where multiplication will start"
+	sys.exit(2)
+	
+	
 print "@relation 'identity"+str(numOfAttributes)+"'"
 
 for i in range(0,numOfAttributes):
