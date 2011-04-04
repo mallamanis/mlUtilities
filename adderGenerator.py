@@ -1,6 +1,17 @@
 #!/usr/bin/python
-numOfPositions = 9
+import sys
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option("-l", "--labels", type="int", dest="numberOfLabels",
+                  help="the number of labels used at the dataset")
 
+(options, args) = parser.parse_args()
+
+if (options.numberOfLabels != None):
+	numOfPositions = options.numberOfLabels;
+else:
+	print "Error: You must define number of labels"
+	sys.exit(2)
 
 print "@relation 'identity"+str(numOfPositions)+"'"
 
