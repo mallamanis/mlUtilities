@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<labels xmlns="http://mulan.sourceforge.net/labels">
+<label name="unacc"></label>
+<label name="acc"></label>
+<label name="good"></label>
+<label name="vgood"></label>
+</labels>
