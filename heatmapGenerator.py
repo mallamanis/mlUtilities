@@ -16,7 +16,9 @@ parser.add_option("-p", "--pixelsPerLabel", dest="pixelsPerLabel",
 parser.add_option("-s", "--show", dest="showHeatmap", action="store_true", default=False,
                   help="open a window showing the heatmap")     
 parser.add_option("-t", "--type", dest="type", type="string", default="BMP",
-                  help="the type of the image to save the heatmap")                          
+                  help="the type of the image to save the heatmap")        
+parser.add_option("-c", "--chi", dest="calcChi", action="store_true", default=False,
+                  help="Instead of the probability calculate the chi-score")  
 
 (options, args) = parser.parse_args()
 
@@ -60,24 +62,49 @@ for i in range(0,numberOfLabels):
   appearances[i]={}
   for j in range(0,numberOfLabels):
     appearances[i][j]=0;
-	
-# Collect data into appearences table
-for instance in range(0,totalInstances):
-	
-	for label in range(0,numberOfLabels):
-		if int(labels[instance][label]) == 1:
-			for i in range (0, numberOfLabels):
-				if (int(labels[instance][i]) == 1):
-					appearances[label][i] += 1.;
-			 
-for i in range(0,numberOfLabels):
-  pyi = appearances[i][i];
-  for j in range(0,numberOfLabels):
-    if (not (pyi == 0)):
-      appearances[i][j] /= pyi;
-    else:
-      appearances[i][j] = 0;
-  appearances[i][i] = pyi/ totalInstances;
+
+if not options.calcChi:
+  # Collect data into appearences table
+  for instance in range(0,totalInstances):
+    
+    for label in range(0,numberOfLabels):
+      if int(labels[instance][label]) == 1:
+        for i in range (0, numberOfLabels):
+          if (int(labels[instance][i]) == 1):
+            appearances[label][i] += 1.;
+
+  for i in range(0,numberOfLabels):
+      pyi = appearances[i][i];
+      for j in range(0,numberOfLabels):
+        if (not (pyi == 0)):
+          appearances[i][j] /= pyi;
+        else:
+          appearances[i][j] = 0;
+      appearances[i][i] = pyi/ totalInstances;
+
+else:
+  for label in range(0,numberOfLabels):
+    for i in range (label, numberOfLabels):
+      A = 0
+      B = 0
+      C = 0
+      D = 0
+      for instance in range(0,totalInstances):
+        if int(labels[instance][label]) == 1:
+          if int(labels[instance][i]) == 1:
+            A += 1
+          else:
+            B += 1
+        else:
+          if int(labels[instance][i]) == 1:
+            C += 1
+          else:
+            D += 1
+      nominator = pow((A*D)-(C*B), 2)
+      denominator = (A+C)*(B+D)*(A+B)*(C+D)
+      if denominator > 0:
+        appearances[label][i] = float(nominator)/float(denominator)
+        appearances[i][label] = float(nominator)/float(denominator)
 
 size = numberOfLabels * sizePerLabelPixel
 output = Image.new("L",(size,size));
